@@ -1,22 +1,18 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Link } from "react-router-dom";
+import useSignUp from "../../hooks/useSignUp";
+
 const SignUp = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [inputs, setInputs] = useState({
+    fullName: "",
+    password: "",
+    email: "",
+  });
 
-  const navigate = useNavigate();
-
-  const handleSubmit = (event) => {
+  const { loading, signup } = useSignUp();
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    axios
-      .post("http://localhost:3001/register", { name, email, password })
-      .then((res) => {
-        console.log(res);
-        navigate("/login");
-      })
-      .catch((error) => console.log(error));
+    await signup(inputs);
   };
 
   return (
@@ -29,32 +25,36 @@ const SignUp = () => {
           <h1 className="text-2xl text-purple-400">Sign In</h1>
           <div className="flex flex-col">
             <input
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) =>
+                setInputs({ ...inputs, fullName: e.target.value })
+              }
               className="px-5 py-3 rounded-md outline-none "
               type="text"
               placeholder="Username"
               id="name"
-              value={name}
+              value={inputs.fullName}
             />
           </div>
           <div className="flex flex-col">
             <input
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setInputs({ ...inputs, email: e.target.value })}
               className="px-5 py-3 rounded-md outline-none "
               type="email"
               placeholder="Email"
               id="email"
-              value={email}
+              value={inputs.email}
             />
           </div>
           <div className="flex flex-col">
             <input
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) =>
+                setInputs({ ...inputs, password: e.target.value })
+              }
               className="px-5 py-3 rounded-md outline-none"
               type="password"
               placeholder="Password"
               id="password"
-              value={password}
+              value={inputs.password}
             />
           </div>
 
